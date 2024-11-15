@@ -2,7 +2,6 @@
 
 To install ST-MAMBASYNC, clone the repository and install the required dependencies:
 
-```bash
-git clone https://github.com/yourusername/ST-MAMBASYNC.git
-cd ST-MAMBASYNC
-pip install -r requirements.txt
+Get mamba from https://github.com/state-spaces/mamba.git added into the ST-MAMBASYNC folder
+Dataset can be frond from LibCity
+Parameter is available in the .yaml
