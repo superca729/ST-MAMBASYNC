@@ -4,10 +4,7 @@ from torchinfo import summary
 import math
 import torch.nn.functional as F
 from mamba_ssm import Mamba
-import os
-import matplotlib.pyplot as plt
-from sklearn.manifold import Isomap
-import numpy as np
+
 class AttentionLayer(nn.Module):
     """Perform attention across the -2 dim (the -1 dim is `model_dim`).
 
@@ -332,54 +329,13 @@ class STMambaSync(nn.Module):
 
         x = torch.cat(features, dim=-1)  # (batch_size, in_steps, num_nodes, model_dim)
 
-        # Create the directory if it doesn't exist
-
-
-
-        # Visualize and save the Isomap plot for the input tensor
-
-        # Visualize and save the input tensor
-        # plt.figure(figsize=(12, 4))
-        # plt.imshow(x[0, :, :, 0].detach().cpu().numpy())  # Visualize the first channel of the first batch
-        # plt.title("Input Tensor")
-        # plt.colorbar()
-        # plt.savefig(os.path.join(output_dir, f"Input_tensor.png"))
-        # plt.close()
-        # Save the initial tensor
-        np.savez(( "initial.npy"), x.detach().cpu().numpy())
-
         input = x
-
-
 
         for attn in self.attn_layers_t:
             x = attn(x, dim=1)
         for attn in self.attn_layers_s:
             x = attn(x, dim=2)
-        # Visualize and save the tensor after applying attention
-        # plt.figure(figsize=(12, 4))
-        # plt.imshow(x[0, :, :, 0].detach().cpu().numpy())  # Visualize the first channel of the first batch
-        # plt.title("Tensor after Attention")
-        # plt.colorbar()
-        # plt.savefig(os.path.join(output_dir, f"Tensor_after_attention.png"))
-        # plt.close()
-
-
-        #x = self.sssm(x)
-
-
-
-
-        # Visualize and save the tensor after applying Mamba layer
-        # plt.figure(figsize=(12, 4))
-        # plt.imshow(x[0, :, :, 0].detach().cpu().numpy())  # Visualize the first channel of the first batch
-        # plt.title("Tensor after Mamba")
-        # plt.colorbar()
-        # plt.savefig(os.path.join(output_dir, f"Tensor_after_mamba.png"))
-        # plt.close()
-
-
-
+        x = self.sssm(x)
 
         if self.use_mixed_proj:
             out = x.transpose(1, 2)  # (batch_size, num_nodes, in_steps, model_dim)
@@ -402,13 +358,6 @@ class STMambaSync(nn.Module):
         return out
 
 
-# if __name__ == "__main__":
-#     model = STMambaSync(207, 12, 12)
-#     device = torch.device('cuda')  # or torch.device('cuda:X') for a specific GPU
-#     model = model.to(device)  # Move the model to the CUDA device
-#
-#     # Create a sample input tensor
-#     x = torch.randn(64, 12, 207, 3)
-#     x = x.to(device)  # Move the input tensor to the CUDA device
-#
-#     summary(model, [64, 12, 207, 3])
+if __name__ == "__main__":
+    model = STMambaSync(207, 12, 12)
+    summary(model, [64, 12, 207, 3])
