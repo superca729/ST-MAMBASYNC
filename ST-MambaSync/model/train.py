@@ -235,8 +235,8 @@ if __name__ == "__main__":
     # -------------------------- set running environment ------------------------- #
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-d", "--dataset", type=str, default="METRLA")
-    parser.add_argument("-g", "--gpu_num", type=int, default=0)
+    parser.add_argument("-d", "--dataset", type=str, default="PEMS08")
+    parser.add_argument("-g", "--gpu_num", type=int, default=1)
     args = parser.parse_args()
 
     seed = torch.randint(1000, (1,)) # set random seed here
@@ -360,7 +360,7 @@ if __name__ == "__main__":
 
     print_log(f"Saved Model: {save}", log=log)
     # -------------------------  set predict data saving path
-    predict_data_path = "./saved_data/{}/".format(dataset)
+    predict_data_path = "../saved_data/{}/".format(dataset)
     if not os.path.exists(predict_data_path):
         os.makedirs(predict_data_path)
     # save_path = os.path.join(predict_data_path, f"{model_name}-{dataset}-{now}.npy")
